@@ -1,7 +1,18 @@
+bl_info = {
+    "name": "Saver",
+    "category": "Rendering",
+    "author": "Patrick Hill",
+    "version": (1, 0),
+    "blender": (2, 80, 0),
+}
+
+
+
 import bpy
 
-from os.path import dirname, exists, join
+from os.path import dirname
 import time
+
 
 def main(context):
     format = bpy.data.scenes['Scene'].render.image_settings.file_format
@@ -12,8 +23,7 @@ def main(context):
     try:
         bpy.data.images['Render Result'].save_render(dirname(bpy.data.filepath) + '/exports/' + time.strftime("%y%m%d") + "-" + time.strftime("%H%M%S") + extension, scene=None)
     except:
-        print('No renders yet. Rendering one for you.')
-        bpy.ops.render.render(use_viewport=True)
+        print('No renders yet. You must render an image before you can save it.')
     
 
 class Saver(bpy.types.Operator):
@@ -25,20 +35,14 @@ class Saver(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class LayoutDemoPanel(bpy.types.Panel):
-    """Creates a Panel in the scene context of the properties editor"""
+
+
+class SaverMenu(bpy.types.Menu):
     bl_label = "Layout Demo"
-    bl_idname = "SCENE_PT_layout"
-    bl_space_type = 'PROPERTIES'
-    bl_region_type = 'WINDOW'
-    bl_context = "render"
+    bl_idname = "viewImage.saverMenu"
 
     def draw(self, context):
         layout = self.layout
-
-        scene = context.scene
-        
-        bpy.app.handlers.render_complete
 
         layout.label(text="Save in background to //exports:")
         row = layout.row()
@@ -46,21 +50,16 @@ class LayoutDemoPanel(bpy.types.Panel):
         row.operator("myops.saver")
     
         
-def my_handler(scene):
-    print("Frame Change")
-    bpy.utils.register_class(LayoutDemoPanel)
-
 
 def register():
     bpy.utils.register_class(Saver)
-    bpy.utils.register_class(LayoutDemoPanel)
-
+    bpy.utils.register_class(SaverMenu)
+#    bpy.ops.wm.call_menu(name=SaverMenu.bl_idname)
 
 def unregister():
     bpy.utils.unregister_class(Saver)
-    bpy.utils.unregister_class(LayoutDemoPanel)
+    bpy.utils.unregister_class(SaverMenu)
 
 
 if __name__ == "__main__":
     register()
-
