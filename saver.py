@@ -9,6 +9,7 @@ bl_info = {
 
 
 import bpy
+
 from os.path import dirname
 import time
 
@@ -46,7 +47,7 @@ def register():
     wm = bpy.context.window_manager
     kc = wm.keyconfigs.addon
     if kc:
-        km = kc.keymaps.new(name="Image", space_type="IMAGE_EDITOR")
+        km = kc.keymaps.new(name="Window")
         kmi = km.keymap_items.new("myops.saver", type="S", value="PRESS", shift=True, ctrl=True, oskey=True)
         addon_keymaps.append((km, kmi))
 
