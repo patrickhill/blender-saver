@@ -1,5 +1,6 @@
 bl_info = {
     "name": "Saver",
+    "description": "ctrl + shift + cmd + s to save image to ./exports"
     "category": "Rendering",
     "author": "Patrick Hill",
     "version": (1, 0),
